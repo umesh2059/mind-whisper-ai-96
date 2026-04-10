@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Bot, User, AlertTriangle, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getGroqResponse } from "@/integrations/groq/client";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -55,26 +56,9 @@ const Chatbot = () => {
   const detectCrisis = (text: string) =>
     CRISIS_KEYWORDS.some((kw) => text.toLowerCase().includes(kw));
 
-  const getResponse = (userMsg: string): string => {
-    const lower = userMsg.toLowerCase();
-    if (lower.includes("anxious") || lower.includes("anxiety") || lower.includes("worried"))
-      return "I hear you — anxiety can feel overwhelming. Let's try a grounding technique: Name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, and 1 you can taste. This can help bring you back to the present moment. 🌿\n\nWould you like to explore what's triggering your anxiety?";
-    if (lower.includes("stress") || lower.includes("overwhelm"))
-      return "Feeling stressed is your body's way of signaling it needs care. Let's take a slow breath together — inhale for 4 counts, hold for 4, exhale for 6. 🧘\n\nWhat's been weighing on you the most?";
-    if (lower.includes("sad") || lower.includes("depress") || lower.includes("hopeless"))
-      return "I'm sorry you're going through this. Your feelings are valid. Sometimes just acknowledging sadness is the first step. 💙\n\nWould it help to talk about what's been making you feel this way?";
-    if (lower.includes("happy") || lower.includes("good") || lower.includes("great"))
-      return "That's wonderful to hear! 🌟 Positive moments are worth celebrating. What's been contributing to your good mood? Recognizing these patterns can help sustain them.";
-    if (lower.includes("sleep") || lower.includes("insomnia") || lower.includes("tired"))
-      return "Sleep is so important for mental health. Some tips: try a consistent bedtime routine, avoid screens 30 minutes before bed, and try a body scan meditation. 🌙\n\nHow long has sleep been a concern for you?";
-    if (lower.includes("lonely") || lower.includes("alone") || lower.includes("isolated"))
-      return "Loneliness can be really painful. Remember that reaching out — even here — is a brave step. 💚 Connection can start small. Is there someone in your life you could reach out to today?";
-    return "Thank you for sharing that with me. I'm here to listen and support you. Could you tell me more about how you're feeling? Understanding your emotions better can help us find ways to support your wellbeing. 🌱";
-  };
-
-  const handleSend = () => {
+  const handleSend = async () => {
     const trimmed = input.trim();
-    if (!trimmed) return;
+    if (!trimmed || isTyping) return;
 
     if (detectCrisis(trimmed)) {
       setShowCrisis(true);
@@ -85,13 +69,25 @@ const Chatbot = () => {
     setInput("");
     setIsTyping(true);
 
-    setTimeout(() => {
+    try {
+      const response = await getGroqResponse(trimmed);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: getResponse(trimmed) },
+        { role: "assistant", content: response },
       ]);
+    } catch (error) {
+      console.error("Error getting Groq response:", error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            "I apologize, but I'm having trouble connecting to my AI system right now. Please try again in a moment. 💙",
+        },
+      ]);
+    } finally {
       setIsTyping(false);
-    }, 1200 + Math.random() * 800);
+    }
   };
 
   return (
