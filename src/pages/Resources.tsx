@@ -13,9 +13,9 @@ const articles = [
 
 const helplines = [
   { name: "988 Suicide & Crisis Lifeline", number: "988", desc: "24/7 crisis support" },
-  { name: "Crisis Text Line", number: "Text HOME to 741741", desc: "Text-based crisis counseling" },
-  { name: "SAMHSA National Helpline", number: "1-800-662-4357", desc: "Treatment referral service" },
-  { name: "NAMI Helpline", number: "1-800-950-6264", desc: "Mental health information" },
+  { name: "QuickText Support", number: "Text HOME to 741741", desc: "Text-based crisis counseling" },
+  { name: "MindCare National Helpline", number: "1-800-662-4357", desc: "Treatment referral service" },
+  { name: "Emotional Support Line", number: "1-800-950-6264", desc: "Mental health information" },
 ];
 
 const exercises = [
