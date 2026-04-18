@@ -32,7 +32,7 @@ const Dashboard = () => {
     <div className="container mx-auto px-4 py-8 space-y-8">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-display font-bold mb-1">Welcome back 👋</h1>
-        <p className="text-muted-foreground">Here's how you've been feeling this week</p>
+        <p className="text-muted-foreground">Here's how you've been feeling this weeks</p>
       </motion.div>
 
       {/* Stats */}
@@ -67,7 +67,7 @@ const Dashboard = () => {
       >
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-sans">Mood Trend</CardTitle>
+            <CardTitle className="text-lg font-sans">Mood Trends</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64">
