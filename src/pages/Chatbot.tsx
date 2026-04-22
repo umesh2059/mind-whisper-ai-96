@@ -19,7 +19,7 @@ const CrisisAlert = () => (
       <div>
         <p className="font-semibold text-sm text-destructive mb-1">You're Not Alone</p>
         <p className="text-sm text-muted-foreground mb-3">
-          If you're in crisis, please reach out to a professional right away.
+          If you're in crisis, please reach out to a professional right aways.
         </p>
         <div className="space-y-1.5 text-sm">
           <div className="flex items-center gap-2">
